@@ -1,39 +1,34 @@
 // author: prisha sujin kumar
-// class to handle vertex buffer layout
+// desc: class to handle vertex buffer layout
 
-// -- include statements -- 
 // third party libraries
+#include <glad/glad.h>
+
 // std libraries
 #include <iostream>
 
 // our libraries
 #include "Vertex.hpp"
-// -- end of include statements --
 
-// constructor
-Vertex:Vertex() {}
+Vertex::Vertex() {}
 
-// destructor
 Vertex::~Vertex() {
 	glDeleteBuffers(1, &m_vertexPositionBuffer);
 	glDeleteBuffers(1, &m_indexBufferObject);
 }
 
-// bind buffer
 void Vertex::Bind() {
 	glBindVertexArray(m_VAOId);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexPositionBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-// unbind buffer
 void Vertex::Unbind() {
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-// create position buffer layout
 void Vertex::CreatePositionBufferLayout(unsigned int vcount, unsigned int icount, float* vdata, unsigned int* idata) {
 	m_stride = 3;
 	static_assert(sizeof(GLfloat)==sizeof(float), "GLFloat and gloat are not the same size on this architecture");
@@ -43,7 +38,7 @@ void Vertex::CreatePositionBufferLayout(unsigned int vcount, unsigned int icount
 
 	glGenBuffers(1, &m_vertexPositionBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexPositionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, vcount*sizeof(float), vdata, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vcount*3*sizeof(float), vdata, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 
@@ -55,7 +50,6 @@ void Vertex::CreatePositionBufferLayout(unsigned int vcount, unsigned int icount
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, icount*sizeof(unsigned int), idata, GL_STATIC_DRAW);
 }
 
-// create texture buffer layout
 void Vertex::CreateTextureBufferLayout(unsigned int vcount, unsigned int icount, float* vdata, unsigned int* idata) {
 	m_stride = 5;
 	static_assert(sizeof(GLfloat)==sizeof(float), "GLFloat and gloat are not the same size on this architecture");
@@ -65,7 +59,7 @@ void Vertex::CreateTextureBufferLayout(unsigned int vcount, unsigned int icount,
 
 	glGenBuffers(1, &m_vertexPositionBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexPositionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, vcount*sizeof(float), vdata, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vcount*5*sizeof(float), vdata, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*m_stride, 0);
@@ -81,7 +75,6 @@ void Vertex::CreateTextureBufferLayout(unsigned int vcount, unsigned int icount,
 
 }
 
-// create normal buffer layout
 void Vertex::CreateNormalBufferLayout(unsigned int vcount, unsigned int icount, float* vdata, unsigned int* idata) {
 	m_stride = 14;
 	static_assert(sizeof(GLfloat)==sizeof(float), "GLFloat and gloat are not the same size on this architecture");
@@ -91,26 +84,26 @@ void Vertex::CreateNormalBufferLayout(unsigned int vcount, unsigned int icount, 
 
 	glGenBuffers(1, &m_vertexPositionBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexPositionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, vcount*sizeof(float), vdata, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vcount * 14 * sizeof(float), vdata, GL_STATIC_DRAW);
+	
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*m_stride, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14*sizeof(float), (void*)0);
 
 	// add normal
 	glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1,3,GL_FLOAT, GL_FALSE,sizeof(float)*m_stride, (char*)(sizeof(float)*3));
-
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 14*sizeof(float), (void*)(3*sizeof(float)));  
 	// add texture
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float)*m_stride, (char*)(sizeof(float)*6));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 14*sizeof(float), (void*)(6*sizeof(float))); 
 
 	// add tangent
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL-FALSE, sizeof(float)*m_stride, (char*)(sizeof(float)*8));
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 14*sizeof(float), (void*)(8*sizeof(float)));
 
 	// add bi-tangent
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(float)*m_stride, (char*)(sizeof(float)*11));
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 14*sizeof(float), (void*)(11*sizeof(float))); 
 
 	static_assert(sizeof(unsigned int)==sizeof(GLuint), "GLuint is not the same size");
 

@@ -1,36 +1,53 @@
 #ifndef VERTEX_HPP
 #define VERTEX_HPP
-
-// class to set up vertex buffer layouts
-
-// -- include statements --
-// third party libraries
-// std libraries
-// our libraries
-// -- end of include statements --
+// author: prisha sujin kumar
+// desc: class to set up vertex buffer layouts
 
 class Vertex {
 	public:
-		// constructor
+		/**
+ 		* @brief constructs a Vertex object
+ 		**/ 
 		Vertex();
-		// destructor
+
+		/**
+ 		* @brief deallocates memory and cleans up
+ 		**/ 
 		~Vertex();
-		// binds
+
+		/**
+ 		* @brief binds buffer
+ 		**/ 
 		void Bind();
-		// unbinds
+
+		/**
+ 		* @brief unbinds buffer
+ 		**/ 
 		void Unbind();
-		// create position buffer layout
+
+		/**
+ 		* @brief creates position buffer layout
+		* @param unsigned int vcount, unsigned int icount, float* vadata, unsigned int* idata
+ 		**/ 
 		void CreatePositionBufferLayout(unsigned int vcount, unsigned int icount, float* vdata, unsigned int* idata);
-		// create texture buffer layout
+		
+		/**
+ 		* @brief creates texture buffer layout
+		* @param unsigned int vcount, unsigned int icount, float* vdata, unsigned int* idata
+ 		**/ 
 		void CreateTextureBufferLayout(unsigned int vcount, unsigned int icount, float* vdata, unsigned int* idata);
-		// create normal buffer layout
-		void CreateNormalbufferLayout(unsigned int vcount, unsigned int icount, float* vdata, unsigned int* idata);
+		
+		/**
+ 		* @brief creates normal buffer layout
+		* @param unsigned int vcount, unsigned int icount, float* vdata, unsigned int* idata
+ 		**/ 
+		void CreateNormalBufferLayout(unsigned int vcount, unsigned int icount, float* vdata, unsigned int* idata);
 	private:
 		// vertex array object
 		GLuint m_VAOId;
-		// vertex buffer
+		// vertex buffer 
 		GLuint m_vertexPositionBuffer;
-		// index buffer
+		// index buffer object
 		GLuint m_indexBufferObject;
 		// stride
 		unsigned int m_stride{0};

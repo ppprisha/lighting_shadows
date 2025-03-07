@@ -1,19 +1,37 @@
 // author: prisha sujin kumar
-// class for main
+// desc: class for main execution
 
-// -- include statements --
 // third party libraries
-// std libraries
-// our libraries
-#include "Program.hpp"
-// -- end of include statements -- 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-void loop() {}
+// std libraries
+#include <iostream>
+
+// our libraries
+#include "Camera.hpp"
+#include "Program.hpp"
+#include "Render.hpp"
+#include "Lighting.hpp"
 
 int main(int argc, char** argv) {
 	Program myProgram(1280, 720);
-	// run !
-	myProgram.SetLoopCallback(loop);
+    	Render myRenderer;
+    	Camera mainCamera;
+	Lighting lighting;
+    
+    	myProgram.SetLoopCallback([&](Camera& camera) { 	
+        	glm::mat4 projection = camera.GetProjectionMatrix(1280.0f/720.0f);
+        	glm::mat4 view = camera.GetViewMatrix();
+
+	
+		lighting.RenderUI();
+		lighting.ApplyLights(myRenderer.GetShaderProgram(), camera.Position);
+
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	
+		myRenderer.RenderScene(view, projection);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);}, mainCamera);
 	
 	return 0;
 }

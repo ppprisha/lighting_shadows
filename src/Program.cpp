@@ -1,9 +1,11 @@
 // author: prisha sujin kumar
-// class to handle sdl graphics program
+// desc: class to handle sdl graphics program
 
-// -- include statements -- 
 // third party libraries
 #include <glad/glad.h>
+#include <imgui.h>
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_opengl3.h>
 
 // std libraries
 #include <iostream>
@@ -13,9 +15,8 @@
 
 // our libraries
 #include "Program.hpp"
-// -- end of include statements -- 
+#include "Camera.hpp"
 
-// constructor and initialization
 Program::Program(int w, int h) {
 	m_window = NULL;
 	m_width = w;
@@ -36,7 +37,7 @@ Program::Program(int w, int h) {
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 	// create window
-	m_window = SDL_CreateWindow("Lighting and Shadow",
+	m_window = SDL_CreateWindow("Lighting and Shadow Engine",
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
 			m_width,
@@ -48,9 +49,12 @@ Program::Program(int w, int h) {
 		exit(EXIT_FAILURE);
 	}
 
+	SDL_SetRelativeMouseMode(SDL_FALSE);
+	SDL_CaptureMouse(SDL_TRUE);
+
 	// create OpenGL context
 	m_openGLContext = SDL_GL_CreateContext(m_window);
-	if (m_openGLContext == NULL) {
+	if (!m_openGLContext) {
 		std::cerr << "ERROR (SDL) - OpenGL context could not be created: " << SDL_GetError() << "\n";
 		exit(EXIT_FAILURE);
 	}
@@ -61,43 +65,111 @@ Program::Program(int w, int h) {
 		exit(EXIT_FAILURE);
 	}
 
-	SDL_Log("No errors during initialization\n\n");
-	// SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN); // uncomment if needed
+	glViewport(0, 0, m_width, m_height);
+	//std::cout << "viewport set to: " << m_width << "x" << m_height << std::endl;
+	glDisable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	SDL_Log("SUCCESS! No errors during initialization\n\n");
+	// SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN);
 	GetOpenGLVersionInfo();
+
+	// initialize dear imgui 
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); 
+	(void)io;
+	ImGui_ImplSDL2_InitForOpenGL(m_window, m_openGLContext);
+	ImGui_ImplOpenGL3_Init("#version 410 core");
+
 }
 
-// destructor
 Program::~Program() {
 	SDL_DestroyWindow(m_window);
 	m_window = nullptr;
 	SDL_Quit();
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
 }
 
-// program run
-void Program::SetLoopCallback(std::function<void(void)> callback) {
+void Program::HandleCamera(Camera& camera, float deltaTime) {
+	const Uint8* state = SDL_GetKeyboardState(NULL);
+
+
+	if (state[SDL_SCANCODE_UP]) {
+		camera.ProcessKeyboardRotation(0.0f, 1.0f, deltaTime);
+	} if (state[SDL_SCANCODE_DOWN]) {
+		camera.ProcessKeyboardRotation(0.0f, -1.0f, deltaTime);
+	} if (state[SDL_SCANCODE_LEFT]) {
+		camera.ProcessKeyboardRotation(-1.0f, 0.0f, deltaTime);
+	} if (state[SDL_SCANCODE_RIGHT]) {
+		camera.ProcessKeyboardRotation(1.0f, 0.0f, deltaTime);
+	}
+	
+	camera.ProcessKeyboard(state, deltaTime);
+	
+
+}
+
+void Program::SetLoopCallback(std::function<void(Camera&)> callback, Camera &mainCamera) {
 	bool quit = false;
 	SDL_Event e;
 	SDL_WarpMouseInWindow(m_window, m_width/2, m_height/2);
-    	const Uint8* keyboardState = SDL_GetKeyboardState(NULL);	
+    	const Uint8* keyboardState = SDL_GetKeyboardState(NULL);
+	float lastFrame = SDL_GetTicks() / 1000.0f;
+	
 
 	while (!quit) {
+		// dear imgui 
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplSDL2_NewFrame();
+		ImGui::NewFrame();
+		float currentFrame = SDL_GetTicks() / 1000.0f;
+		float deltaTime = currentFrame - lastFrame;		
+		lastFrame = currentFrame;
+
+		if (deltaTime > 0.1f) {
+			deltaTime = 0.1f;
+		}
+
+		lastFrame = currentFrame;
+		HandleCamera(mainCamera, deltaTime);
+
 		while (SDL_PollEvent(&e) != 0) {
+			ImGui_ImplSDL2_ProcessEvent(&e);
 			if (e.type == SDL_QUIT) {
 				quit = true;
 			}
+			if (e.key.keysym.sym == SDLK_ESCAPE) {
+                		quit = true;
+            		} if (currentFrame - mainCamera.lastKey < mainCamera.doubleKey) { // back to original spot
+				mainCamera.Reset();
+				mainCamera.lastKey = -1.0f;
+			}
 		}
-		SDL_Delay(25);
+
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		callback(mainCamera);
+
+		// render imgui
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 		SDL_GL_SwapWindow(GetSDLWindow());
+		
 	}
 
 }
 
-// get pointer to window
 SDL_Window* Program::GetSDLWindow() {
 	return m_window;
 }
 
-// get OpenGL info
 void Program::GetOpenGLVersionInfo() {
 	SDL_Log("(Note: If you have two GPU's, make sure the correct one is selected)");
 	SDL_Log("Vendor: %s",(const char*)glGetString(GL_VENDOR));
