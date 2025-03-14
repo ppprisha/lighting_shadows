@@ -32,6 +32,8 @@ This is a real-time 3D rendering system demonstration modern lighting and shadow
 
 ## Dependencies
 
+Install dependencies using your preferred package manager!
+
 | Library  | Version  |     License |
 | --- | --- | -- |
 | [SDL2](https://www.libsdl.org)  | 3.38  | zLib |
@@ -56,12 +58,20 @@ This is a real-time 3D rendering system demonstration modern lighting and shadow
 
 ## Installation and running
 **Note** You will need to open build.py to edit configurations to fit your system.
+1. Clone the repository:
 ```bash
   git clone <project-url>
   cd project
+  ```
+2. Install dependencies
+3. Build project
+```bash
   python3 build.py
-  ./prog
-```
+  ```
+4. ...and run!
+```bash
+    ./orig
+    ```
     
 ## Acknowledgements
 
