@@ -10,7 +10,7 @@ This is a real-time 3D rendering system demonstration modern lighting and shadow
 - Distance attenuation and spotlight angles
 
 #### Technical
-- Interactive Ui for user to control lighting intensity, position, direction, and cutoffs
+- Interactive UI for user to control lighting intensity, position, direction, and cutoffs
 - Modular architecture with component-based lighting system, decoupled UI controls, and shadow pipeline
 
 #### Experimental
