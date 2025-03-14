@@ -10,7 +10,7 @@ IMGUI_SOURCES = " \
 ./thirdparty/imgui/backends/imgui_impl_opengl3.cpp \
 "
 SOURCE="./src/*.cpp" + IMGUI_SOURCES  
-EXECUTABLE="prog"       
+EXECUTABLE="proj"       
 
 # platform specific configurations - change as needed
 ARGUMENTS=""            # arguments needed
