@@ -70,8 +70,8 @@ Install dependencies using your preferred package manager!
   ```
 4. ...and run!
 ```bash
-    ./orig
-    ```
+  ./proj
+  ```
     
 ## Acknowledgements
 
