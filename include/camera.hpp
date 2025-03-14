@@ -42,7 +42,6 @@ class Camera {
 		* @brief handles keyboard keys rotation
 		* @param float xOffset, float yOffset
 		**/
-	    	
 		void ProcessKeyboardRotation(float xOffset, float yOffset, float deltaTime);
 
 		/**

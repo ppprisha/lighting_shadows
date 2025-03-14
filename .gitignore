@@ -1,0 +1,18 @@
+# compiled binaries
+*.exe
+*.dll
+*.so
+*.a
+
+# macOS
+*.dSYM
+.DS_Store
+
+
+# Dear ImGui
+imgui.ini
+
+# vim files
+*.swp
+*.swo
+*.swpx

@@ -41,10 +41,12 @@ class Render {
 		// Geometry objects
 		Geometry m_sphere;
 		Geometry m_cube;
+		Geometry m_floor;
 		
 		// Vertex objects
 		Vertex m_sphereVO;
 		Vertex m_cubeVO;
+		Vertex m_floorVO;
 		
 		// Shader program
 		GLuint m_shaderProgram;

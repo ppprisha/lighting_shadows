@@ -57,6 +57,7 @@ class Program {
 		void GetOpenGLVersionInfo();
 
 	private:
+		// initialization variables
 		SDL_Window* m_window;
 		SDL_GLContext m_openGLContext;
 		unsigned int m_width;

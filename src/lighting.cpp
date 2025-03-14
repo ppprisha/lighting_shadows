@@ -16,21 +16,21 @@ Lighting::Lighting() {
 	pointLight = PointLight {
 		true,
 		glm::vec3(0.0f, 1.0f, 0.0f),
-		glm::vec3(1.0f, 0.5f, 0.5f),
+		glm::vec3(0.0f, 0.0f, 0.6f),
 		1.5f
 	};
 
 	directionalLight = DirectionalLight {
 		true,
 		glm::vec3(-0.2f, -1.0f, -0.3f),
-		glm::vec3(0.8f, 0.8f, 0.8f)
+		glm::vec3(1.0f, 0.4f, 0.8f)
 	};
 
 	spotLight = SpotLight {
 		true,
 		glm::vec3(0.0f, 3.0f, 3.0f),
 		glm::vec3(0.0f, -1.0f, 0.0f),
-		glm::vec3(1.0f),
+		glm::vec3(0.8f, 0.2f, 0.6f),
 		12.5f,
 		17.5f
 	};

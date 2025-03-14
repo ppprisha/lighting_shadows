@@ -15,13 +15,13 @@
 #include "Lighting.hpp"
 
 int main(int argc, char** argv) {
-	Program myProgram(1280, 720);
+	Program myProgram(1600, 900);
     	Render myRenderer;
     	Camera mainCamera;
 	Lighting lighting;
     
     	myProgram.SetLoopCallback([&](Camera& camera) { 	
-        	glm::mat4 projection = camera.GetProjectionMatrix(1280.0f/720.0f);
+        	glm::mat4 projection = camera.GetProjectionMatrix(1600.0f/900.0f);
         	glm::mat4 view = camera.GetViewMatrix();
 
 	

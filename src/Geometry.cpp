@@ -108,11 +108,32 @@ unsigned int* Geometry::GetIndicesDataPtr() {
 	return m_indices.data();
 }
 
-/**
- * desc: generates a sphere
- * params: float radius, int sectorCount, int stackCount
- * return: void
- **/
+void Geometry::GenerateFloor(float size) {
+	m_vertexPositions.clear();
+	m_indices.clear();
+
+	float half = size / 2.0f;
+
+	AddVertex(-half, 0.0f, -half, 0.0f, 0.0f);
+	AddVertex(half, 0.0f, -half, 1.0f, 0.0f);
+	AddVertex(half, 0.0f, half, 1.0f, 1.0f);
+	AddVertex(-half, 0.0f, half, 0.0f, 1.0f);
+
+	m_indices = {
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	for (int i = 0; i < 4; i++) {
+		m_normals[i * 3 + 0] = 0.0f;
+		m_normals[i * 3 + 1] = 1.0f;
+		m_normals[i * 3 + 2] = 0.0f;
+	}
+
+	Gen();
+
+}
+
 void Geometry::GenerateSphere(float radius, int sectorCount, int stackCount) {
 	m_vertexPositions.clear();
     	m_indices.clear();

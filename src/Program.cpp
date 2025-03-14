@@ -24,7 +24,7 @@ Program::Program(int w, int h) {
 
 	// initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		std::cerr << "ERROR (SDL) - SDL could not initialize: " << SDL_GetError() << "\n";
+		std::cerr << "ERROR (PROGRAM) - SDL could not initialize: " << SDL_GetError() << "\n";
 		exit(EXIT_FAILURE);
 	}
 
@@ -45,7 +45,7 @@ Program::Program(int w, int h) {
 			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
 	if (m_window == NULL) {
-		std::cerr << "ERROR (SDL) - Window could not be created: " << SDL_GetError() << "\n";
+		std::cerr << "ERROR (PROGRAM) - Window could not be created: " << SDL_GetError() << "\n";
 		exit(EXIT_FAILURE);
 	}
 
@@ -55,13 +55,13 @@ Program::Program(int w, int h) {
 	// create OpenGL context
 	m_openGLContext = SDL_GL_CreateContext(m_window);
 	if (!m_openGLContext) {
-		std::cerr << "ERROR (SDL) - OpenGL context could not be created: " << SDL_GetError() << "\n";
+		std::cerr << "ERROR (PROGRAM) - OpenGL context could not be created: " << SDL_GetError() << "\n";
 		exit(EXIT_FAILURE);
 	}
 
 	// initialize GLAD library
 	if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
-		std::cerr << "ERROR (SDL) - Failed to initialize GLAD\n";
+		std::cerr << "ERROR (PROGRAM) - Failed to initialize GLAD\n";
 		exit(EXIT_FAILURE);
 	}
 

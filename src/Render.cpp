@@ -9,15 +9,22 @@
 #include "Render.hpp"
 
 Render::Render() {
+	// create floor
+	m_floor.GenerateFloor(15.0f);
+	float *floorData = m_floor.GetBufferDataPtr();
+	unsigned int floorVCount = m_floor.GetBufferDataSize() / 14;
+	m_floorVO.CreateNormalBufferLayout(floorVCount, m_floor.GetIndicesSize(),
+			floorData, m_floor.GetIndicesDataPtr());
+
 	// create sphere
-	m_sphere.GenerateSphere(0.5f, 36, 18);
+	m_sphere.GenerateSphere(2.0f, 36, 18);
 	float *sphereData = m_sphere.GetBufferDataPtr();
 	unsigned int sphereVCount = m_sphere.GetBufferDataSize() / 14;
 	m_sphereVO.CreateNormalBufferLayout(sphereVCount, m_sphere.GetIndicesSize(), 
 			sphereData, m_sphere.GetIndicesDataPtr());
 
 	// create cube
-	m_cube.GenerateCube(1.0f);
+	m_cube.GenerateCube(4.0f);
 	float *cubeData = m_cube.GetBufferDataPtr();
 	unsigned int cubeVCount = m_cube.GetBufferDataSize() / 14;
 	m_cubeVO.CreateNormalBufferLayout(cubeVCount, m_cube.GetIndicesSize(), 
@@ -38,21 +45,26 @@ void Render::RenderScene(const glm::mat4& view, const glm::mat4& projection) {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glUseProgram(m_shaderProgram);
 
-	// render sphere
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(-1.5f, 0.0f, -2.0f));
+	model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
 	glUniformMatrix4fv(glGetUniformLocation(m_shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(m_shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
-	glUniformMatrix4fv(glGetUniformLocation(m_shaderProgram, "projection"), 1, GL_FALSE, 
-			&projection[0][0]);
-	
+	glUniformMatrix4fv(glGetUniformLocation(m_shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
+	m_floorVO.Bind();
+	glDrawElements(GL_TRIANGLES, m_floor.GetIndicesSize(), GL_UNSIGNED_INT, 0);
+
+
+	// render sphere
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(-4.0f, 0.0f, -2.0f));
+	glUniformMatrix4fv(glGetUniformLocation(m_shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);	
 	m_sphereVO.Bind();
 	glDrawElements(GL_TRIANGLES, m_sphere.GetIndicesSize(), GL_UNSIGNED_INT, 0);
 	
 
 	// render cube
 	model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(1.5f, 0.0f, -2.0f));
+	model = glm::translate(model, glm::vec3(4.0f, 0.0f, -2.0f));
 	glUniformMatrix4fv(glGetUniformLocation(m_shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
 
 	m_cubeVO.Bind();

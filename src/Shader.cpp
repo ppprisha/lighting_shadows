@@ -26,7 +26,7 @@ GLuint Shader::LoadShaders(const char * vertexShaderSource, const char * fragmen
 		vertexShaderCode = sstr.str();
 		VertexShaderStream.close();
 	} else {
-		std::cerr << "ERROR (SHADERS) - unable to read vertex shader\n";
+		std::cerr << "ERROR (SHADER) - unable to read vertex shader\n";
 		getchar();
 		return 0;
 	}
@@ -40,7 +40,7 @@ GLuint Shader::LoadShaders(const char * vertexShaderSource, const char * fragmen
 		fragmentShaderCode = sstr.str();
 		fragmentShaderStream.close();
 	} else {
-		std::cerr << "ERROR (SHADERS) - unable to read fragment shader\n";
+		std::cerr << "ERROR (SHADER) - unable to read fragment shader\n";
 		getchar();
 		return 0;
 	}
@@ -92,7 +92,7 @@ GLuint Shader::LoadShaders(const char * vertexShaderSource, const char * fragmen
     		std::vector<GLchar> infoLog(infoLogLength + 1);
     		glGetProgramInfoLog(programID, infoLogLength, NULL, &infoLog[0]);
     
-    		std::cerr << "ERROR (SHADERS) - shader program linking failed: \n" << &infoLog[0] << std::endl;
+    		std::cerr << "ERROR (SHADER) - shader program linking failed: \n" << &infoLog[0] << std::endl;
     
     		glDeleteProgram(programID);
     		return 0;

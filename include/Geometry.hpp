@@ -60,6 +60,12 @@ class Geometry {
 		unsigned int* GetIndicesDataPtr();
 
 		/**
+		* @brief generates a floor
+		* @param float size
+		**/ 
+		void GenerateFloor(float size);
+
+		/**
  		* @brief generates a sphere
 		* @param float radius, int sectorCount, int stackCount (default of 1.0f, 36, 18)
  		**/ 
