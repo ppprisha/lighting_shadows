@@ -16,3 +16,7 @@ imgui.ini
 *.swp
 *.swo
 *.swpx
+
+# third party
+thirdparty/*
+!thirdparty/imgui/
