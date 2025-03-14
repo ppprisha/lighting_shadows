@@ -22,3 +22,6 @@ imgui.ini
 
 # common 
 common
+
+# SDL
+*.dll
